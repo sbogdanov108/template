@@ -25,7 +25,7 @@ gulp.task('css', function ()
             })
         ))
         .pipe(autoprefixer())
-        .pipe(gulp.dest('app/css'))
+        .pipe(gulp.dest('app/assets/css'))
         .pipe(notify('Good work!'));
 });
 
@@ -42,12 +42,12 @@ gulp.task('default', ['watch']);
 gulp.task('mainJS', function ()
 {
     return gulp.src(mainBowerFiles('**/*.js'))
-        .pipe(gulp.dest('app/js'))
+        .pipe(gulp.dest('app/assets/js'))
 });
 
 // get main css files from bower
 gulp.task('mainCSS', function ()
 {
     return gulp.src(mainBowerFiles('**/*.css'))
-        .pipe(gulp.dest('app/css'))
+        .pipe(gulp.dest('app/assets/css'))
 });

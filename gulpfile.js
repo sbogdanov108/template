@@ -14,7 +14,7 @@ var gulp         = require( 'gulp' ),
 
 var bc = './bower_components/';
 
-// отслеживание всех js файлов в проекте
+// отслеживание всех js файлов в директории
 gulp.task( 'js', function()
 {
     gulp.src( 'builds/development/app/**/*.js' )
@@ -27,6 +27,13 @@ gulp.task( 'html', function()
 {
     gulp.src( 'builds/development/**/*.html' )
         .pipe( gulp.dest( 'builds/dist/' ) )
+} );
+
+// отслеживание шрифтов в директории
+gulp.task( 'fonts', function()
+{
+    gulp.src( 'builds/development/fonts/**/*' )
+        .pipe( gulp.dest( 'builds/dist/fonts/' ) );
 } );
 
 // отслеживание всех sass файлов в директории
@@ -92,6 +99,7 @@ gulp.task( 'watch', function()
     gulp.watch( 'builds/development/sass/**/*.scss', [ 'sass' ] );
     gulp.watch( 'builds/development/**/*.html', [ 'html' ] );
     gulp.watch( 'builds/development/img/**/*', [ 'img' ] );
+    gulp.watch( 'builds/development/fonts/**/*', [ 'fonts' ] );
 } );
 
 // default
@@ -100,6 +108,7 @@ gulp.task( 'default', [
     'html',
     'img',
     'js',
+    'fonts',
     'sass',
     'webserver',
     'watch'

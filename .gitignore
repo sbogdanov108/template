@@ -2,8 +2,13 @@
 ### Example user template template
 ### Example user template
 
-bower/
+*~
+.DS_Store
+.idea/
+bower_components/
 node_modules/
+builds/development/libs/**/*
+builds/development/css/style.min.css
 
 ### Sass template
 .sass-cache

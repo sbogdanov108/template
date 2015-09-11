@@ -1,6 +1,7 @@
 {
-  "name": "blog",
-  "version": "0.0.0",
+  "name": "template",
+  "version": "1.0.0",
+  "homepage": "https://github.com/sbogdanov108/template",
   "authors": [
     "Sergey Bogdanov <bgrodthai@gmail.com>"
   ],
@@ -9,24 +10,11 @@
     "**/.*",
     "node_modules",
     "bower_components",
-    "bower",
     "test",
     "tests"
   ],
   "dependencies": {
     "jquery": "~2.1.4",
     "bootstrap": "~3.3.5"
-  },
-  "overrides": {
-    "jquery": {
-      "main": [
-        "./dist/jquery.js"
-      ]
-    },
-    "bootstrap": {
-      "main": [
-        "./dist/css/bootstrap.min.css"
-      ]
-    }
   }
 }

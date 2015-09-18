@@ -6,7 +6,7 @@
 
 var gulp         = require( 'gulp' ),
     notify       = require( 'gulp-notify' ),
-    webserver    = require( 'gulp-webserver' ),
+    //webserver    = require( 'gulp-webserver' ),
     autoprefixer = require( 'gulp-autoprefixer' ),
     sass         = require( 'gulp-sass' ),
     concat       = require( 'gulp-concat' ),
@@ -82,7 +82,7 @@ gulp.task( 'libs', function()
         .pipe( gulp.dest( './builds/dist/libs/bootstrap/' ) );
 } );
 
-gulp.task( 'webserver', function()
+/*gulp.task( 'webserver', function()
 {
     gulp.src( 'builds/dist/' )
         .pipe( webserver( {
@@ -90,7 +90,7 @@ gulp.task( 'webserver', function()
             open      : true,
             port      : 8001
         } ) );
-} );
+} );*/
 
 // watch
 gulp.task( 'watch', function()
@@ -110,6 +110,6 @@ gulp.task( 'default', [
     'js',
     'fonts',
     'sass',
-    'webserver',
+    //'webserver',
     'watch'
 ] );

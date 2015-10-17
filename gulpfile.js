@@ -10,6 +10,7 @@ var gulp         = require( 'gulp' ),
     autoprefixer = require( 'gulp-autoprefixer' ),
     sass         = require( 'gulp-sass' ),
     concat       = require( 'gulp-concat' ),
+    del          = require( 'del' ),
     csso         = require( 'gulp-csso' ), // минификация css
     uglifyJs     = require( 'gulp-uglify' ),  // минификация js;
     rename       = require( "gulp-rename" );
@@ -18,14 +19,16 @@ var bc    = './bower_components/',
     notBc = './not_bower/';
 
 // отслеживание всех js файлов в директории
+
 gulp.task( 'js', function()
 {
   gulp.src( 'builds/development/app/**/*.js' )
-    .pipe( concat( 'app.js' ) )
+    .pipe( concat( 'app.concat.js' ) )
     .pipe( gulp.dest( 'builds/dist/app/' ) )
 } );
 
 // отслеживание всех html файлов в проекте
+
 gulp.task( 'html', function()
 {
   del( 'builds/dist/**/*.html' ).then( function()
@@ -36,6 +39,7 @@ gulp.task( 'html', function()
 } );
 
 // отслеживание шрифтов в директории
+
 gulp.task( 'fonts', function()
 {
   del( 'builds/dist/fonts/' ).then( function()
@@ -46,6 +50,7 @@ gulp.task( 'fonts', function()
 } );
 
 // отслеживание всех sass файлов в директории
+
 gulp.task( 'sass', function()
 {
   gulp.src( 'builds/development/sass/**/*' )
@@ -56,7 +61,7 @@ gulp.task( 'sass', function()
       } ) )
   )
     .pipe( autoprefixer() )
-    .pipe( concat( 'style.concat.css' ) )
+    .pipe( concat( 'styles.concat.css' ) )
     .pipe( gulp.dest( 'builds/dist/css/' ) )
     .pipe( notify( 'SASS - good work!' ) );
 } );
@@ -71,6 +76,7 @@ gulp.task( 'img', function()
 } );
 
 // вытащить нужные библиотеки из bower в билд
+
 gulp.task( 'libs', function()
 {
   // css
@@ -113,6 +119,55 @@ gulp.task( 'libs', function()
  port      : 8001
  } ) );
  } );*/
+
+// сделать билд
+
+gulp.task( 'buildProduction', function()
+{
+  del( 'builds/production/*' ).then( function()
+  {
+    // js
+
+    gulp.src( [
+      'builds/dist/libs/jquery/*.js',
+      'builds/dist/libs/bootstrap/*.js',
+      'builds/dist/app/app.concat.js'
+    ] )
+      .pipe( concat( 'app.concat.js' ) )
+      .pipe( gulp.dest( 'builds/production/js/' ) )
+      .pipe( uglifyJs() )
+      .pipe( rename( 'app.min.js' ) )
+      .pipe( gulp.dest( 'builds/production/js/' ) );
+
+    // css
+
+    gulp.src( [
+      'builds/dist/libs/bootstrap/css/bootstrap.css',
+      'builds/dist/libs/genericons/genericons.css',
+      'builds/dist/css/styles.concat.css'
+    ] )
+      .pipe( concat( 'styles.concat.css' ) )
+      .pipe( gulp.dest( 'builds/production/css/' ) )
+      .pipe( csso() )
+      .pipe( rename( 'styles.min.css' ) )
+      .pipe( gulp.dest( 'builds/production/css/' ) );
+
+    // fonts
+
+    gulp.src( 'builds/dist/fonts/**/*' )
+      .pipe( gulp.dest( 'builds/production/fonts/' ) );
+
+    // img
+
+    gulp.src( 'builds/dist/img/**/*' )
+      .pipe( gulp.dest( 'builds/production/img/' ) );
+
+    // html
+
+    gulp.src( 'builds/dist/*.html' )
+      .pipe( gulp.dest( 'builds/production/' ) );
+  } );
+} );
 
 // watch
 

@@ -28,15 +28,21 @@ gulp.task( 'js', function()
 // отслеживание всех html файлов в проекте
 gulp.task( 'html', function()
 {
-  gulp.src( 'builds/development/**/*.html' )
-    .pipe( gulp.dest( 'builds/dist/' ) )
+  del( 'builds/dist/**/*.html' ).then( function()
+  {
+    gulp.src( 'builds/development/**/*.html' )
+      .pipe( gulp.dest( 'builds/dist/' ) )
+  } )
 } );
 
 // отслеживание шрифтов в директории
 gulp.task( 'fonts', function()
 {
-  gulp.src( 'builds/development/fonts/**/*' )
-    .pipe( gulp.dest( 'builds/dist/fonts/' ) );
+  del( 'builds/dist/fonts/' ).then( function()
+  {
+    gulp.src( 'builds/development/fonts/**/*' )
+      .pipe( gulp.dest( 'builds/dist/fonts/' ) );
+  } )
 } );
 
 // отслеживание всех sass файлов в директории
@@ -46,50 +52,56 @@ gulp.task( 'sass', function()
     .pipe( sass().on( 'error', notify.onError(
       {
         message: "<%= error.message %>",
-        title  : "Error!"
+        title  : "Sass error!"
       } ) )
   )
     .pipe( autoprefixer() )
-    .pipe( concat( 'style.min.css' ) )
-    .pipe( csso() )
+    .pipe( concat( 'style.concat.css' ) )
     .pipe( gulp.dest( 'builds/dist/css/' ) )
-    .pipe( notify( 'Good work!' ) );
+    .pipe( notify( 'SASS - good work!' ) );
 } );
 
 gulp.task( 'img', function()
 {
-  gulp.src( 'builds/development/img/**/*' )
-    .pipe( gulp.dest( 'builds/dist/img/' ) );
+  del( 'builds/dist/img' ).then( function()
+  {
+    gulp.src( 'builds/development/img/**/*' )
+      .pipe( gulp.dest( 'builds/dist/img/' ) );
+  } );
 } );
 
 // вытащить нужные библиотеки из bower в билд
 gulp.task( 'libs', function()
 {
   // css
-
-  //genericons
+  // genericons
 
   gulp.src( notBc + 'genericons/*' )
     .pipe( gulp.dest( './builds/dist/libs/genericons/' ) );
 
-  // отдельные файлы js/css
-  gulp.src( bc + 'jquery/dist/jquery.js' )
-    .pipe( gulp.dest( './builds/dist/libs/jquery/' ) );
+  // bootstrap
 
   gulp.src( bc + 'bootstrap/dist/css/bootstrap.css' )
     .pipe( gulp.dest( './builds/dist/libs/bootstrap/css/' ) );
 
-  // папку с дистрибутивом
-  // gulp.src( bc + 'bootstrap/dist/**/*.*' )
-  //    .pipe( gulp.dest( './builds/dist/libs/bootstrap/' ) );
+  // js
+  // jquery
 
-  // сразу несколько библиотек
+  gulp.src( bc + 'jquery/dist/jquery.js' )
+    .pipe( gulp.dest( './builds/dist/libs/jquery/' ) );
+
+  // bootstrap
+
   gulp.src( [
     bc + 'bootstrap/js/affix.js',
     bc + 'bootstrap/js/tooltip.js'
   ] )
     .pipe( concat( 'bootstrap.concat.js' ) )
     .pipe( gulp.dest( './builds/dist/libs/bootstrap/' ) );
+
+  // папку с дистрибутивом
+  // gulp.src( bc + 'bootstrap/dist/**/*.*' )
+  //    .pipe( gulp.dest( './builds/dist/libs/bootstrap/' ) );
 } );
 
 /*gulp.task( 'webserver', function()
@@ -103,6 +115,7 @@ gulp.task( 'libs', function()
  } );*/
 
 // watch
+
 gulp.task( 'watch', function()
 {
   gulp.watch( 'builds/development/app/**/*.js', [ 'js' ] );
@@ -113,13 +126,14 @@ gulp.task( 'watch', function()
 } );
 
 // default
+
 gulp.task( 'default', [
+  'js',
   'libs',
   'html',
   'img',
-  'js',
   'fonts',
   'sass',
-  //'webserver',
   'watch'
+  //'webserver',
 ] );

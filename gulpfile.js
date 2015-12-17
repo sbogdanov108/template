@@ -192,3 +192,62 @@ gulp.task( 'default', [
   'watch'
   //'webserver',
 ] );
+
+/* Uglify JS */
+
+gulp.task( 'uglifyJs', function()
+{
+  // return возвращает поток. Для последовательного исполнения задач.
+  // Далее указывается порядок подключения скриптов
+  return gulp.src( [
+      'uglify/js/ajax.js',
+      'uglify/js/app.js',
+      '!uglify/js/*.min.js' // Исключить все минифицированные файлы
+    ] )
+    .pipe( concat( 'temp.concat.js' ) )
+    .pipe( gulp.dest( 'uglify/done/js/' ) )
+    .pipe( uglifyJs() )
+    .pipe( rename( 'temp.min.js' ) )
+    .pipe( gulp.dest( 'uglify/done/js/' ) );
+} );
+
+// Этот таск вызывает минификацию скриптов, затем делает конкатенацию сжатых скриптов
+gulp.task( 'concatJsMain', [ 'uglifyJs' ], function()
+{
+  gulp.src( [
+      'uglify/js/jquery.min.js',
+      'uglify/done/js/temp.min.js'
+    ] )
+    .pipe( concat( 'app.min.js' ) )
+    .pipe( gulp.dest( 'uglify/done/js/' ) );
+} );
+
+/* Uglify CSS */
+
+gulp.task( 'uglifyCss', function()
+{
+  // return возвращает поток. Для последовательного исполнения задач.
+  // Далее указывается порядок подключения css
+  return gulp.src( [
+      'uglify/css/styles.css',
+      '!uglify/css/*.min.js' // Исключить все минифицированные файлы
+    ] )
+    .pipe( autoprefixer() )
+    .pipe( concat( 'temp.concat.css' ) )
+    .pipe( gulp.dest( 'uglify/done/css/' ) )
+    .pipe( csso() )
+    .pipe( rename( 'temp.min.css' ) )
+    .pipe( gulp.dest( 'uglify/done/css/' ) );
+} );
+
+// Этот таск вызывает минификацию css, затем делает конкатенацию сжатых css
+gulp.task( 'concatCssMain', [ 'uglifyCss' ], function()
+{
+  gulp.src( [
+      'uglify/css/bootstrap.min.css',
+      'uglify/css/font-awesome.min.css',
+      'uglify/done/css/temp.min.css'
+    ] )
+    .pipe( concat( 'app.min.css' ) )
+    .pipe( gulp.dest( 'uglify/done/css/' ) );
+} );
